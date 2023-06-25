@@ -4,10 +4,12 @@ const http = require('http');
 const server = http.createServer(app);
 var cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser')
+var session = require('express-session');
 // const { Server } = require("socket.io");
 // const io = new Server(server);
 
 app.use(cookieParser());
+app.use(session({secret: "Shh, its a secret!"}));
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.set("view engine", "ejs");
@@ -19,11 +21,11 @@ app.get('/', (req, res) => {
 });
 
 app.get('/join', (req, res) => {
-    res.render("join")
+    res.render("join_game")
 })
 
 app.post('/join', (req, res) => {
-    let game_id = req.body.game_id;
+    const game_id = req.body.game_id;
     if (all_joinable_ids.includes(game_id)){
         res.redirect("/join/" + game_id)
     } else {
@@ -34,8 +36,7 @@ app.post('/join', (req, res) => {
 app.get('/join/:game_id', (req, res) => {
     const game_id = req.params.game_id
     if (all_joinable_ids.includes(game_id)){
-        // render page where it asks for nickname
-        res.send("Enter nickname")
+        res.render("enter_nickname", {game_id: game_id});
     } else{
         res.redirect("/")
     }
@@ -43,20 +44,25 @@ app.get('/join/:game_id', (req, res) => {
 
 app.post('/join/:game_id', (req, res) => {
     const game_id = req.params.game_id
+    const nickname = req.body.nickname
     if (all_joinable_ids.includes(game_id)){
-        // set cookies for game id
-        // set cookies for username
-        // redirect to /play
-        res.send("Joining game....")
+        req.session.game_id = game_id
+        req.session.nickname = nickname;
+        res.redirect("/play")
     } else{
         res.redirect("/")
     }
 })
 
 app.get('/play', (req, res) => {
-    // get game_id from cookies
+    const game_id = req.session.game_id;
+    const nickname = req.session.nickname;
     if (all_joinable_ids.includes(game_id)){
-        // checks if username is set
+        if (nickname == undefined){
+            res.redirect("/join/" + game_id)
+        } else {
+            res.render("play", {game_id: game_id, nickname: nickname});
+        }
         // render page where it shows it's about to start
         res.send("Joining game....")
     } else{

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Join Game <%= game_id %> - GuessAlpha</title>
+    <style>
+    </style>
+  </head>
+  <body>
+    <h1>JOIN GAME <%= game_id %></h1>
+    <form action="/join/<%= game_id %>" method="POST">
+        <input name="nickname" placeholder="NICKNAME"/>
+        <input type="submit" value="JOIN"/>
+    </form>
+  </body>
+</html>
