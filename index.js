@@ -63,8 +63,6 @@ app.get('/play', (req, res) => {
         } else {
             res.render("play", {game_id: game_id, nickname: nickname});
         }
-        // render page where it shows it's about to start
-        res.send("Joining game....")
     } else{
         res.redirect("/")
     }
