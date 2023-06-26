@@ -15,11 +15,20 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.set("view engine", "ejs");
 
 const greek_alphabet = { "Α": "alpha", "α": "alpha", "Β": "beta", "β": "beta", "Γ": "gamma", "γ": "gamma", "Δ": "delta", "δ": "delta", "Ε": "epsilon", "ε": "epsilon", "Ζ": "zeta", "ζ": "zeta", "Η": "eta", "η": "eta", "Θ": "theta", "θ": "theta", "Ι": "iota", "ι": "iota", "Κ": "kappa", "κ": "kappa", "Λ": "lambda", "λ": "lambda", "Μ": "mu", "μ": "mu", "Ν": "nu", "ν": "nu", "Ξ": "xi", "ξ": "xi", "Ο": "omicron", "ο": "omicron", "Π": "pi", "π": "pi", "Ρ": "rho", "ρ": "rho", "Σ": "sigma", "σ": "sigma", "ς": "sigma", "Τ": "tau", "τ": "tau", "Υ": "upsilon", "υ": "upsilon", "Φ": "phi", "φ": "phi", "Χ": "chi", "χ": "chi", "Ψ": "psi", "ψ": "psi", "Ω": "omega", "ω": "omega" }
-const all_joinable_ids = ["12345"]
+const all_joinable_ids = []
 
 app.get('/', (req, res) => {
     res.render("home")
 });
+
+app.get('/host', (req, res) => {
+    var game_id = (Math.floor(Math.random()*90000) + 10000).toString()
+    while (all_joinable_ids.includes(game_id)){
+        game_id = (Math.floor(Math.random()*90000) + 10000).toString()
+    }
+    all_joinable_ids.push(game_id)
+    res.render("host", {game_id: game_id})
+})
 
 app.get('/join', (req, res) => {
     res.render("join_game")
