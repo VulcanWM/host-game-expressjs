@@ -84,6 +84,9 @@ io.on('connection', (socket) => {
     socket.on('user joined', (user, game_id) => {
         io.emit('user joined', user, game_id);
     });
+    socket.on('game started', (game_id) => {
+        io.emit('game started', game_id)
+    })
 });
 
 server.listen(3000, () => {
