@@ -8,5 +8,21 @@
   <body>
     <h1>GAME <%= game_id %></h1>
     <p>Waiting for players...</p>
+    <div id="users">
+        <h2>Players</h2>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io();
+        socket.on('user joined', function(user, that_game_id) {
+            console.log(user, that_game_id)
+            if (that_game_id == <%= game_id %>){
+                console.log("yesss.")
+                const theDiv = document.getElementById("users")
+                var content = document.createTextNode(user);
+                theDiv.appendChild(content); 
+            }
+        })
+    </script>
   </body>
 </html>

@@ -5,8 +5,8 @@ const server = http.createServer(app);
 var cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser')
 var session = require('express-session');
-// const { Server } = require("socket.io");
-// const io = new Server(server);
+const { Server } = require("socket.io");
+const io = new Server(server);
 
 app.use(cookieParser());
 app.use(session({secret: "Shh, its a secret!"}));
@@ -58,6 +58,7 @@ app.post('/join/:game_id', (req, res) => {
     if (all_joinable_ids.includes(game_id)){
         req.session.game_id = game_id
         req.session.nickname = nickname;
+        io.emit('user joined', nickname, game_id);
         res.redirect("/play")
     } else{
         res.redirect("/")
@@ -79,12 +80,11 @@ app.get('/play', (req, res) => {
 })
 
 
-// io.on('connection', (socket) => {
-    // console.log('a user connected');
-    // socket.on('chat message', (user, msg) => {
-    //     io.emit('chat message', user, msg);
-    // });
-// });
+io.on('connection', (socket) => {
+    socket.on('user joined', (user, game_id) => {
+        io.emit('user joined', user, game_id);
+    });
+});
 
 server.listen(3000, () => {
   console.log('listening on *:3000');
