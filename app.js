@@ -9,7 +9,7 @@ const { Server } = require("socket.io");
 const io = new Server(server);
 
 app.use(cookieParser());
-app.use(session({secret: "Shh, its a secret!"}));
+app.use(session({secret: "SNDIRN23NE($£FO£OPRP$$RIP£$4OF34H43-F1["}));
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.set("view engine", "ejs");
